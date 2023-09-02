@@ -10,11 +10,9 @@ def mytest(data):
     """
 
     # Преобразование ключа 'ident' в список чисел для сортировки.
-    # Например, '2.1.11' становится [2, 1, 11], что позволяет корректно сортировать версии.
     sorted_data = dict(sorted(data.items(), key=lambda item: [int(part) for part in item[1]["ident"].split('.')]))
 
     # Преобразование строки в поле "value" в список слов.
-    # Например, "test   test" становится ["test", "test"]
     for key in sorted_data:
         sorted_data[key]["value"] = sorted_data[key]["value"].strip().split()
 
