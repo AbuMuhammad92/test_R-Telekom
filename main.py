@@ -8,7 +8,6 @@ from inspect import getsource, getdoc
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-
 class Function:
     def __init__(self, module, name, description, code):
         self.module = module
@@ -16,30 +15,28 @@ class Function:
         self.description = description
         self.code = code
 
-
 def dynamic_import(module_name, function_name):
+    """Динамически импортирует и возвращает функцию из указанного модуля."""
+
     module = importlib.import_module(module_name)
     function = getattr(module, function_name, None)
-    if not function:
-        return None
     return function
 
-
 @app.post("/json/")
-def process_json(data: Dict[str, Any]):
+def process_json(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Обрабатывает JSON-запрос, динамически импортирует и выполняет функцию."""  
+    
     module_name = data["module"]
     function_name = data["function"]
-
     function = dynamic_import(module_name, function_name)
     if not function:
         return {"error": f"Unknown function {function_name}"}
-
-    result = function(data["data"])
-    return result
-
+    return function(data["data"])
 
 @app.get("/html/", response_class=HTMLResponse)
-def show_functions():
+def show_functions() -> HTMLResponse:
+    """Отображает список функций в HTML-формате."""
+
     modules = ['myname']
     functions = []
     for mod_name in modules:
@@ -48,5 +45,4 @@ def show_functions():
             attr = getattr(module, attr_name)
             if callable(attr) and not attr_name.startswith("_"):
                 functions.append(Function(mod_name, attr_name, getdoc(attr), getsource(attr)))
-
     return templates.TemplateResponse("functions.html", {"request": {}, "functions": functions})
