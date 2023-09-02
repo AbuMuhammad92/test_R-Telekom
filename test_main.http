@@ -1,0 +1,22 @@
+### Test POST /json/
+POST http://127.0.0.1:8000/json/
+Content-Type: application/json
+
+{
+  "module": "myname",
+  "function": "mytest",
+  "data": {
+      "ERROR number 1": {
+          "ident": "2.1.11",
+          "value": " test   test   "
+      },
+      "ERROR number 2": {
+          "ident": "2.1.2",
+          "value": " bla bla   "
+      },
+      "ERROR number 3": {
+          "ident": "2.5",
+          "value": "Boo Boo     Boo"
+      }
+  }
+}
